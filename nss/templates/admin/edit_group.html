@@ -1,0 +1,26 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/manage_groups.css' %}">
+</head>
+<div class="card">
+    <div class="card-header">
+        <h2>Edit Group</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 10px;">
+               <div style="color: black;font-weight: bold;"> {{ form.name.label_tag }}</div> 
+                {{ form.name }}
+            </div>
+            <div style="color: black;font-weight: bold;">{{ form.permissions.label_tag }}</div>
+            <div style="margin-bottom: 10px;">
+                {{ form.permissions }}
+            </div>
+            <button type="submit" class="btn-primary">Update Group</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

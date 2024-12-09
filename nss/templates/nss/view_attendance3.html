@@ -1,0 +1,42 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static '/css/view_attendance.css'%}">
+</head>
+
+<div class="form-container">
+    {% if status %}
+    <h1 class="event-heading">{{ status.event.event_name|title }}-{{status.date}}-Unit-{{status.unit}}
+    </h1>
+    <h1 class="event-heading">Status: {{status.status|title}}
+        {% endif %}
+        {% if status.status == "pending for approval" %}
+        {% if is_po_group %}
+        <a class="app"  href="{% url 'approve_attendance' status.status_id %}"> Approve</a>
+        <a class="app"  href="{% url 'reject_attendance' status.status_id %}"> Reject</a>
+        {% endif %}
+        {% endif %}
+        {% if status.status_id %}
+        <td><a class="app"  href="{% url 'delete_attendance' status.status_id %}"> Delete</a></td>
+        {% endif %}
+    </h1>
+    <table class="attendance-table" border="1">
+        <tr>
+            <th>Name</th>
+            <th>Programme</th>
+        </tr>
+        {% for i in resul %}
+        <tr>
+            <td>{{ i.volunteer.name }}</td>
+            <td>{{i.volunteer.year}}-Year {{ i.volunteer.program}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="full-report">
+        <a href="{% url 'view_attendance2' %}">View Full Attendance Report</a>
+        <a href="javascript:history.back()" class="buttons" style="text-decoration: none;">Go Back</a>
+    </div>
+</div>
+{% endblock %}

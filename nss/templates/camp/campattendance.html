@@ -1,0 +1,62 @@
+{% extends 'nss/base.html'%}
+{% load static %}
+{% block title %}
+    attendance
+{% endblock%}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_attendance.css'%}">
+  
+</head> 
+    <form action="{% url 'addcampattendance' %}" method="post">
+    {% csrf_token %}
+    <div class="volunteer-form">
+        {% if request.GET.message1 %}
+        <p align="center" style="color:red">{{ request.GET.message1 }}</p>
+        {% endif %}
+        {% if request.GET.message2 %}
+        <p align="center" style="color:green">{{ request.GET.message2 }}</p>
+        {% endif %}
+        <label for="camp"><b>Camp:</b></label>
+        <select name="camp" id="camp" required>
+            <option value="" selected disabled>Select Camp</option>
+            {% for i in camps%}
+                <option value="{{i.camp_id}}">{{i.camp_name}}</option>
+            {% endfor %}
+        </select>
+    <input type="checkbox" onclick="checkAll()" id="select-all">select all
+    </div>
+    <div class="div1">
+        {% for i in pog %}
+        <div class="program-block">
+            {% for k in list %}
+            <div class="list-block">
+                
+                <center><span class="year-text" style="background-color: rgb(7, 7, 44); color: white;">{{i.program_name}} - Year {{k}}</span></center><br>
+                {% for j in vol %}
+                    {% if i.program_name == j.program.program_name and j.year == k %}
+                        <div class="checkbox-label">
+                            <input type="checkbox" class="at" id="volunteer_{{ j.volunteer_id }}" name="volunteers" value="{{ j.volunteer_id }}">
+                            <label for="volunteer_{{ j.volunteer_id }}">{{ j.name }}</label>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <input type="submit" value="submit" class="submit">
+</form>
+<script type="text/javascript">
+function checkAll() {
+    var selectAllCheckbox = document.getElementById('select-all');
+    var checkboxes = document.querySelectorAll('.at');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = selectAllCheckbox.checked;
+    }
+}
+
+</script>
+{% endblock%}

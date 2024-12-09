@@ -1,0 +1,182 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.table-container {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.custom-form .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type="submit"], .reset {
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    background-color: rgb(7, 7, 44);
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+input[type="submit"]:hover, .reset:hover {
+    background-color: rgb(7, 7, 44);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: rgb(7, 7, 44);
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.button {
+    
+    padding: 8px 12px;
+    border: none;
+    color: white;
+    background-color: rgb(7, 7, 44);
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: rgb(7, 7, 44);
+}
+
+.button.delete {
+    background-color: rgb(7, 7, 44);
+}
+
+.button.delete:hover {
+    background-color: rgb(7, 7, 44);
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination .step-links {
+    display: flex;
+    gap: 10px;
+}
+
+.pagination .step-links .button2 {
+    padding: 8px 12px;
+    border: none;
+    color: white;
+    background-color: rgb(7, 7, 44);
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.pagination .step-links .button2:hover {
+    background-color: rgb(7, 7, 44);
+}
+
+.current {
+    padding: 8px 12px;
+}
+
+
+@media (max-width: 480px) {
+    th, td {
+        font-size: 12px;
+    }
+
+    .button{
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .custom-form {
+        padding: 10px;
+    }
+
+    .custom-form input[type="submit"],
+    .custom-form input[type="reset"],.reset {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .button {
+        flex: 1;
+        margin-bottom: 10px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .custom-form select,
+    .custom-form input[type="text"],
+    .custom-form input[type="number"],
+    .custom-form input[type="email"] {
+        padding: 4px;
+        font-size: 10px;
+    }
+
+    .delete-btn img {
+        display: none; /* Hide the delete icon on small screens */
+    }
+}
+

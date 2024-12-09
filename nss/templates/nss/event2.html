@@ -1,0 +1,24 @@
+{% extends 'nss/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<head>
+  <link rel="stylesheet" href="{% static '/css/event2.css'%}">
+</head>
+  <div style="display: flex; justify-content: center; gap: 20px;">
+    <div class="card">
+      <a href="{% url 'event_details' %}" class="link">
+        <img src="{% static '/images/eventdet.png' %}" alt="Event Details" class="card-image">
+        <div class="card-text">Event Details</div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{% url 'event_photos' %}" class="link">
+        <img src="{% static '/images/eventpic.jpg' %}" alt="Event Pictures" class="card-image">
+        <div class="card-text">Event Pictures</div>
+      </a>
+    </div>
+  </div>
+
+{% endblock %}

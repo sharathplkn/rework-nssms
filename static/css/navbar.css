@@ -1,0 +1,146 @@
+/* navbar.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .header {
+    background: linear-gradient(135deg, #04083f, #65718a);
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+  }
+  
+  .header .logo {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    height: 90px; /* Adjust the size of the logo */
+  }
+  
+  .menu-toggle {
+    display: none; /* Hide checkbox by default */
+  }
+  
+  .menu-icon {
+    display: none; /* Hide menu icon by default */
+    cursor: pointer;
+    font-size: 28px;
+    padding: 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Ensure it's above other content */
+  }
+  
+  .menu-toggle:checked + .menu-icon {
+    display: block; /* Display menu icon when checkbox is checked */
+  }
+  
+  .nav-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: none; /* Hide nav links by default */
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    background-color: #333;
+    z-index: 999; /* Ensure it's above other content */
+    padding: 10px 0;
+  }
+  
+  .nav-links.active {
+    display: block; /* Show nav links when checkbox is checked */
+  }
+  
+  .nav-links li {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .nav-links li a {
+    display: block;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-links li a:hover {
+    background-color: #1abc9c;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background: linear-gradient(135deg, #141a6a, #65718a);
+    min-width: 160px;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-content a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #1abc9c;
+  }
+  
+  .logout-form {
+    position: absolute;
+    top: 20px; /* Adjust top position */
+    right: 20px; /* Adjust right position */
+    z-index: 1000; /* Ensure it's above the toggle button */
+  }
+  
+  .logout-button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    background-color: #2980b9;
+  }
+  
+  @media (max-width: 768px) {
+    .menu-icon {
+      display: block; /* Display menu icon for toggle on smaller screens */
+    }
+  
+    .nav-links {
+      top: 60px; /* Adjust position of nav links */
+      padding-top: 40px; /* Add padding to top */
+    }
+  
+    .nav-links li {
+      margin-bottom: 20px; /* Increase margin between nav items */
+    }
+  
+    .nav-links li:last-child {
+      margin-bottom: 0; /* Remove margin from last nav item */
+    }
+  }
+  

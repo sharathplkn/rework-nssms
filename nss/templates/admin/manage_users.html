@@ -1,0 +1,84 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/manage_users.css' %}">
+</head>
+   
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Manage Users</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <div>{{ form.username.label_tag }}</div>
+                    <div>{{ form.username }}</div>
+                </div>
+                <div>
+                    <div>{{ form.password.label_tag }}</div>
+                    <div>{{ form.password }}</div>
+                </div>
+                <div>
+                    <div>{{ form.email.label_tag }}</div>
+                    <div>{{ form.email }}</div>
+                </div>
+                <div class="form-check">
+                    <div> {{ form.is_active.label }}</div>
+                    <div> {{ form.is_active }}</div>
+                </div>
+                <div>
+                    <div>{{ form.groups.label_tag }}</div>
+                    <div>
+                        <select name="{{ form.groups.name }}" id="{{ form.groups.id }}" class="form-control">
+                            {% for group_id, group_name in form.groups.field.choices %}
+                            {% if group_name != 'admin' and is_po_group  %}
+                                <option value="{{ group_id }}" {% if group_id == form.instance.groups.first.id %} selected {% endif %}>{{ group_name }}</option>
+                            {% else %}
+                            <option value="{{ group_id }}" {% if group_id == form.instance.groups.first.id %} selected {% endif %}>{{ group_name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary">Add/Update User</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Existing Users</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <a href="{% url 'edit_user' user.pk %}" class="btn-warning">Edit</a>
+                                <a href="{% url 'delete_user' user.pk %}" class="btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

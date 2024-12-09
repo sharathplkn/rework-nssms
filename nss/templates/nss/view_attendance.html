@@ -1,0 +1,42 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static '/css/view_attendance.css'%}">
+    <style>
+        li.error{
+        color: red;
+        list-style-type: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bolder;
+    }
+    </style>
+</head>
+{% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+{% endif %}
+<div class="form-container">
+    <form method="post" action="{% url 'view_attendance' %}">
+        {% csrf_token %}
+        <label for="event">Select Event:</label>
+        <select id="event" name="event">
+            <option disabled selected>Select Event</option>
+            {% for i in even %}
+            <option value="{{ i.status_id}}">{{ i.event.event_name|title }}-{{i.date}}-Unit-{{i.unit}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+    
+</div>
+{% endblock %}

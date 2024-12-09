@@ -1,0 +1,31 @@
+{% extends 'nss/base.html'%}
+{% load static %}
+{% block title %}
+    attendance
+{% endblock%}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/view_volunteer.css'%}">
+</head>
+<table class="table-container">
+    <tr>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Expense</th>
+        <th style="text-align: center;">Actions</th>
+    </tr>
+    {% for i in eve %}
+    <tr>
+    <td>{{i.event_name|title}}</td>
+    <td>{{i.date}}</td>
+    <td>{{i.expense}}</td>
+    <td>
+        <div class="button-container">
+            <a class="button" href="{% url 'edit_event' i.event_id %}">Edit</a>
+            <a class="button" href="{% url 'delete_event' i.event_id %} " onclick="return confirm('Are you sure you want to delete?')">Delete</a>
+        </div>
+    </td>
+    </tr>
+    {% endfor%}
+</table>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'nss/base.html'%}
+{% load static %}
+{% block title %}
+attendance
+{% endblock%}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+</head>
+{% if request.GET.message %}
+<p align="center" style="color:green">{{ request.GET.message }}</p>
+{% endif %}
+{% for i in eve%}
+<form class="add-event-form" method="post" action="{% url 'edit_event' i.event_id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="event_name">Event Name:</label>
+    <input type="text" id="event_name" name="event_name" value="{{i.event_name}}">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" value="{{i.date|date:'Y-m-d'}}">
+    <!--Event-details-->
+    <label for="des">Description:</label><br>
+    {% if i.eventdetails %}
+    {% for j in i.eventdetails.all%}
+    {% if j.des %}
+    <textarea id="des" name="des">{{j.des}}</textarea>
+    {% else %}
+    No Description added yet.<a href="{% url 'event_details' %}">add Description</a>
+    {% endif%}
+    {% endfor %}
+    {% endif %}
+    <br><br>
+
+    <label for="photo">Image:</label>
+    Current Images Uploaded are :<br>
+    {% if i.eventphotos %}
+    {% for j in i.eventphotos.all %}
+    {% if j.photo %}
+    <a href="{{j.photo.url}}" target="_blank">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}"
+        onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <br>
+    <br>
+    <a href="{% url 'event_photos' %}">Upload Images</a>
+    <br><br>
+    
+
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+
+</form>
+
+{% endfor %}
+{% endblock %}

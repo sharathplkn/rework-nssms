@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <style>
+    .colored-header {
+    font-size: 2em;
+    text-align: center;
+}
+
+.colored-header .n {
+    color: orangered;
+}
+
+
+.colored-header .o {
+    color: green;
+}
+
+.colored-header .d {
+    color: orangered;
+}
+
+.colored-header .e {
+    color: green;
+}
+
+.colored-header .s {
+    color: orangered;
+}
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header class="header">
+      <div class="logo-container">
+        <img src="{% static 'images/logo2.webp' %}" alt="College Logo" class="left-logo">
+        <div class="header-content">
+          <h3 class="colored-header">
+            <span class="n">N</span>SS</span> 
+            <span class="o">O</span>UTREACH 
+            <span class="d">D</span>EVELOPMENT 
+            <span class="e">E</span>NGAGEMENT 
+            <span class="s">S</span>YSTEM
+        </h3>
+          <h4>NEHRU ARTS AND SCIENCE COLLEGE KANHANGAD</h4>
+        </div>
+        <img src="{% static 'images/nss.png' %}" alt="NSS Logo" class="right-logo">
+      </div>
+    </header>
+    
+    <nav>
+      <ul>
+        <li><a href="{% url 'ns' %}">Home</a></li>
+        {% if is_po_group or is_vs_group %}
+        <li class="dropdown">
+          <a href="#">Volunteer</a>
+          <div class="dropdown-content">
+            <a href="{% url 'add_volunteer' %}">Add Volunteer</a>
+            <a href="{% url 'view_volunteer' %}">View Volunteer</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Event</a>
+          <div class="dropdown-content">
+            <a href="{% url 'add_event' %}">Add Event</a>
+            <a href="{% url 'event2' %}">Uploads</a>
+            <a href="{% url 'view_event' %}">View Events</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Attendance</a>
+          <div class="dropdown-content">
+            <a href="{% url 'att3' %}">Add Attendance</a>
+            <a href="{% url 'view_attendance' %}">View Attendance</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Report</a>
+          <div class="dropdown-content">          
+            <a href="{% url 'report_list' %}">Event-Wise</a>
+            <a href="{% url 'select_month' %}">Monthly Report</a>
+            <a href="{% url 'select_year' %}">Yearly Report</a>
+          </div>
+        </li>
+        {% endif %}
+        {% if is_admin_group  or is_po_group %}
+        <li class="dropdown">
+          <a href="#">Users</a>
+          <div class="dropdown-content">
+            <a href="{% url 'manage_users' %}">Manage Users</a>
+            {% if is_admin_group %}
+            <a href="{% url 'manage_groups' %}">Manage Groups</a>
+            {% endif %}
+          </div>
+        </li>
+        {% endif %}
+        {% if is_po_group %}
+        <li><a href="{% url 'promote_check' %}">Promote</a></li>
+        <li class="dropdown">
+          <a href="{% url 'camp' %}">Camp</a>
+        <div class="dropdown-content">
+
+        </div>
+        {% endif %}
+        </li>
+        <li>
+          <a href="{% url 'change_password' %}">Change Password</a>
+        </li>
+        <li>
+          <form  method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout" type="submit">Logout</button>
+          </form>
+        </li>
+    
+      </ul>
+    </nav>
+    
+    <div class="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="contact-info">
+      <p> &copy;NSSMS 2024 - Developed by the students of Int M.Sc. Computer Science, NASC </p>
+    </div>
+  </footer>
+
+</body>
+</html>

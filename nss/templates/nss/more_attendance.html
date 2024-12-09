@@ -1,0 +1,21 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block title %}
+    Volunteer Details
+{% endblock %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/volunteer_details.css'%}">
+</head>
+<table border="1px" cellspacing="0">
+{% for i in vol%}
+    <tr><th>Name</th><td colspan="2">{{i.name}}</td></tr>
+    <tr><th>Total Number of Hours</th><td colspan="2">{{i.total_hours}}</td></tr>
+    <tr><th>Event Participated</th><th>Date</th><th>Number of hours</th></tr>
+    {% for attendance in i.attendances.all %}
+    <tr><td>{{attendance.event.event_name|title}}</td><td>{{attendance.event.date}}</td><td>{{attendance.no_of_hours}}</td></tr>
+    {% endfor %}
+{%  endfor %}
+<tr><td colspan="3"><button id="back" onclick="history.back(-1)">Go Back</button></td></tr>
+</table>
+{% endblock %}

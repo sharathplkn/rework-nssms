@@ -1,0 +1,32 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/event_details.css'%}">
+</head>
+{% if request.GET.message1 %}
+<p align="center" style="color:green">{{ request.GET.message1 }}</p>
+{% endif %}
+{% if request.GET.message2 %}
+<p align="center" style="color:red">{{ request.GET.message2 }}</p>
+{% endif %}
+<form class="event-form" method="post">
+    {% csrf_token %}
+    <label for="event_name">Event:</label>
+    <select id="event_name" name="event_name" required>
+        <option value="" disabled selected> Select Event</option>
+        {% for i in even %}
+        <option value="{{i.event_id}}">{{i.event_name}}-{{i.date}}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    <label for="expense">Expense:</label><br>
+    <input type="text" id="expense" name="expense" required>
+    <label for="des">Description:</label><br>
+    <textarea id="des" name="des" required></textarea>
+    <br><br>
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+    <a href="javascript:history.back()" class="buttons" style="text-decoration: none;">Go Back</a>
+</form>
+{% endblock %}
