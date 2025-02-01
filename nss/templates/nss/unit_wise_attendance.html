@@ -1,0 +1,82 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+    <style>
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .attendance-table th,
+        .attendance-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .attendance-table th {
+            background-color: #f5f5f5;
+        }
+        
+        .attendance-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .attendance-table tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<div class="add-event-form">
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="id_unit">Select Unit:</label>
+        {{ form.unit }}
+        
+        <label for="id_from_date">From Date:</label>
+        {{ form.from_date }}
+        
+        <label for="id_to_date">To Date:</label>
+        {{ form.to_date }}
+        
+        <div class="button-group">
+            <input type="submit" value="Show Attendance">
+            <input type="reset" value="Reset">
+        </div>
+    </form>
+
+    {% if show_results %}
+        <div class="attendance-results">
+            <h3>Attendance Records</h3>
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Volunteer Name</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_records %}
+                    <tr>
+                        <td>{{ record.volunteer.name }}</td>
+                        <td>{{ record.event.event_name }}</td>
+                        <td>{{ record.event.date }}</td>
+                        <td>{{ record.status }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No attendance records found for the selected criteria.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

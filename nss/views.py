@@ -19,6 +19,10 @@ from docx.shared import Inches, Cm
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.db.models import Sum
+
+from .filters import VolunteerFilter2
+from django.urls import reverse
 
 
 
@@ -159,6 +163,85 @@ def view_attendance(request):
         return render(request, 'nss/view_attendance.html', eve)
     except Exception:
         return render(request,'nss/error.html')
+
+@login_required()
+@group_required('po','vs')
+def unit_wise_attendance(request):
+    try:
+        if request.method == "POST":
+            form = UnitWiseAttendanceForm(request.POST)
+            if form.is_valid():
+                # Redirect to same view with parameters in GET
+                unit = form.cleaned_data['unit']
+                from_date = form.cleaned_data['from_date'].strftime('%Y-%m-%d')
+                to_date = form.cleaned_data['to_date'].strftime('%Y-%m-%d')
+                return redirect(f'{reverse("unit_wise_attendance")}?unit={unit}&from_date={from_date}&to_date={to_date}')
+        
+        # Handle GET request with parameters
+        unit = request.GET.get('unit')
+        from_date_str = request.GET.get('from_date')
+        to_date_str = request.GET.get('to_date')
+        
+        if unit and from_date_str and to_date_str:
+            from_date = datetime.strptime(from_date_str, '%Y-%m-%d')
+            to_date = datetime.strptime(to_date_str, '%Y-%m-%d')
+            
+            # Get volunteers from the selected unit
+            volunteers = volunteer.objects.filter(unit=unit, status='active')
+            
+            # Apply the volunteer filter
+            volunteer_filter = VolunteerFilter2(request.GET, queryset=volunteers)
+            filtered_volunteers = volunteer_filter.qs
+            
+            # Calculate total hours for each volunteer in the date range
+            for vol in filtered_volunteers:
+                total_hours = Attendance.objects.filter(
+                    volunteer=vol,
+                    date__range=[from_date, to_date]
+                ).aggregate(Sum('no_of_hours'))['no_of_hours__sum'] or 0
+                vol.total_hours = total_hours
+            
+            # Pagination
+            items_per_page = request.GET.get('items_per_page', 10)
+            try:
+                items_per_page = int(items_per_page)
+            except ValueError:
+                items_per_page = 10
+            
+            paginator = Paginator(filtered_volunteers, items_per_page)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            
+            # Add the date range and unit to the filter's form data
+            if volunteer_filter.form.data:
+                filter_data = volunteer_filter.form.data.copy()
+            else:
+                filter_data = {}
+            filter_data.update({
+                'unit': unit,
+                'from_date': from_date_str,
+                'to_date': to_date_str
+            })
+            volunteer_filter.form.data = filter_data
+            
+            context = {
+                'filter': volunteer_filter,
+                'page_obj': page_obj,
+                'items_per_page': items_per_page,
+                'show_results': True,
+                'from_date': from_date,
+                'to_date': to_date,
+                'unit': unit
+            }
+            return render(request, 'nss/unit_wise_attendance_results.html', context)
+        else:
+            form = UnitWiseAttendanceForm()
+            return render(request, 'nss/unit_wise_attendance.html', {'form': form})
+            
+    except Exception as e:
+        print(str(e))  # For debugging
+        return render(request, 'nss/error.html')
+
 @login_required()
 @group_required('po','vs')
 def volunteer_details(request, volunteer_name):

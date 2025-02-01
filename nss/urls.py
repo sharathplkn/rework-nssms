@@ -12,6 +12,7 @@ urlpatterns=[
     path('add_attendance/<int:pk>/<int:unit>/',views.attendance,name='attendance'),
     path('att2',views.view_attendance2,name='view_attendance2'),
     path('att',views.view_attendance,name='view_attendance'),
+    path('unit_wise_attendance',views.unit_wise_attendance,name='unit_wise_attendance'),
     path('event_report/<int:event_id>/',views.generate_event_report, name='generate_event_report'),
     path('volunteer2/<str:volunteer_name>/',views.volunteer_details, name='volunteer_details'),
     path('even',views.add_event,name='add_event'),
