@@ -1,0 +1,21 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+</head>
+<div class="add-event-form">
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="id_unit">Select Unit:</label>
+        {{ form.unit }}
+        
+        <label for="id_event">Select Event:</label>
+        {{ form.event }}
+        
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+</div>
+{% endblock %} 

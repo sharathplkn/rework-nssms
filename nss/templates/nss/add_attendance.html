@@ -47,44 +47,38 @@
             color: #555;
         }
 
-    input[type="submit"] {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
 
-    input[type="submit"]:hover {
-        background-color: #0056b3;
-    }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
-{% if request.GET.message %}
-<p align="center" style="color:green">{{ request.GET.message }}</p>
-{% endif %}
-    <form class="volunteer-form" method="post" action="{% url 'unit_wise'%}">
-        {% csrf_token %}
-    <label for="event">Event:</label>
-    <select id="event" name="event" required>
-    <option value="" disabled selected >Select event</option>
-    {% for i in even %}
-    <option value="{{ i.event_id }}">{{ i.event_name }}-{{i.date}}</option>
-    {% endfor %}
-    </select><br>
-    <label for="unit">Unit:</label>
-    <select id="unit" name="unit" required>
-        <option value="" disabled selected>Select Unit</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="96">96</option>
-    </select>
-    <div id="cont">
-    <input type="submit" value="select">
 
+{% if message %}
+<p align="center" style="color:green">{{ message }}</p>
+{% endif %}
+
+<form class="volunteer-form" method="post" action="{% url 'unit_wise'%}">
+    {% csrf_token %}
+    
+    <label for="id_event">Event:</label>
+    {{ form.event }}
+    
+    <label for="id_unit">Unit:</label>
+    {{ form.unit }}
+    
+    <div id="cont">
+        <input type="submit" value="select">
     </div>
-    </form>
-{% endblock%}
+</form>
+{% endblock %}

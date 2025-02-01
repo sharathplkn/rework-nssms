@@ -9,10 +9,10 @@
     {% endif %}
     <form class="add-event-form" method="post" action="{% url 'add_event' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="event_name">Event Name:</label>
-        <input type="text" id="event_name" name="event_name" required>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
+        <label for="id_event_name">Event Name:</label>
+        {{ form.event_name }}
+        <label for="id_date">Date:</label>
+        {{ form.date }}
         <input type="submit" value="Submit">
         <input type="reset" value="Reset">
     </form>

@@ -4,18 +4,27 @@
 <head>
     <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
 </head>
+<div class="add-event-form">
     {% if request.GET.message %}
     <p align="center" style="color:green">{{ request.GET.message }}</p>
     {% endif %}
-    <form class="add-event-form" method="post" action="{% url 'add_camp' %}" enctype="multipart/form-data">
+
+    <form method="post">
         {% csrf_token %}
-        <label for="camp_name">Camp Name:</label>
-        <input type="text" id="camp_name" name="camp_name" required>
-        <label for="fromdate">From:</label>
-        <input type="date" id="fromdate" name="fromdate" required>
-        <label for="todate">To:</label>
-        <input type="date" id="todate" name="todate" required>
-        <input type="submit" value="Submit">
-        <input type="reset" value="Reset">
+        
+        <label for="id_camp_name">Camp Name:</label>
+        {{ form.camp_name }}
+        
+        <label for="id_fromdate">From Date:</label>
+        {{ form.fromdate }}
+        
+        <label for="id_todate">To Date:</label>
+        {{ form.todate }}
+        
+        <div class="button-group">
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </div>
     </form>
+</div>
 {% endblock %}

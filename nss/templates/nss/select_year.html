@@ -4,13 +4,20 @@
 <head>
     <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
 </head>
-    <form class="add-event-form" method="post" action="{% url 'yearly_report' %}" enctype="multipart/form-data">
+<div class="add-event-form">
+    <form method="post" action="{% url 'yearly_report' %}">
         {% csrf_token %}
-        <label for="fromyear">From:</label>
-        <input type="date" id="fromyear" name="fromyear" required>
-        <label for="toyear">To:</label>
-        <input type="date" id="toyear" name="toyear" required>
-        <input type="submit" value="Submit">
-        <input type="reset" value="Reset">
+        
+        <label for="id_fromyear">From Date:</label>
+        {{ form.fromyear }}
+        
+        <label for="id_toyear">To Date:</label>
+        {{ form.toyear }}
+        
+        <div class="button-group">
+            <input type="submit" value="Generate Report">
+            <input type="reset" value="Reset">
+        </div>
     </form>
+</div>
 {% endblock %}

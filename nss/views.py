@@ -190,44 +190,44 @@ def event(request):
 @group_required('po','vs')
 def add_event(request):
     try:
-        if request.method=="POST":
-            event_name=request.POST.get('event_name')
-            date=request.POST.get('date')
-            ev=Event(event_name=event_name,date=date)
-            ev.save()
-            message="Submitted Successfully"
-            return redirect(reverse('add_event') + '?message=' + message)
-        return render(request,'nss/add_event.html')
+        if request.method == "POST":
+            form = AddEventForm(request.POST)
+            if form.is_valid():
+                form.save()
+                message = "Submitted Successfully"
+                return redirect(reverse('add_event') + '?message=' + message)
+        else:
+            form = AddEventForm()
+        return render(request, 'nss/add_event.html', {'form': form})
     except Exception:
-        return render(request,'nss/error.html')
+        return render(request, 'nss/error.html')
 
 
 @login_required()
 @group_required('po','vs')
 def event_details(request):
-
+    try:
         eve = {
             'even': Event.objects.all().order_by('date').values()
         }
-        if request.method=="POST":
-            event_id=request.POST.get('event_name')
-            des=request.POST.get('des')
-            expense=request.POST.get('expense')
-            event_id=Event.objects.get(event_id=event_id)
-            event_exists = Event_details.objects.filter(event=event_id).exists()
-            if not event_exists:
-                ev=Event_details(event=event_id,des=des,expense=expense)
-                ev.save()
-                message="Submitted Successfully"
+        
+        if request.method == "POST":
+            event_id = request.POST.get('event_name')
+            event = Event.objects.get(event_id=event_id)
+            
+            event_details_instance, created = Event_details.objects.get_or_create(event=event)
+            form = EventDetailsForm(request.POST, instance=event_details_instance)
+            
+            if form.is_valid():
+                event_details = form.save(commit=False)
+                event_details.event = event
+                event_details.save()
+                message = "Submitted Successfully"
                 return redirect(reverse('event_details') + '?message1=' + message)
-            else:
-                ev=Event_details.objects.get(event=event_id)
-                ev.des=des
-                ev.expense=expense
-                ev.save()
-                message="Submitted Successfully"
-                return redirect(reverse('event_details') + '?message1=' + message)
-        return render(request,'nss/event_details.html',eve)
+        
+        return render(request, 'nss/event_details.html', eve)
+    except Exception:
+        return render(request, 'nss/error.html')
 
 @login_required()
 @group_required('po','vs')
@@ -250,23 +250,29 @@ def report(request):
 def event_photos(request):
     try:
         eve = {
-            'even': Event.objects.all().order_by('date').values()
+            'even': Event.objects.all().order_by('date').values(),
+            'form': EventPhotosForm()
         }
+        
         if request.method == "POST" and request.FILES:
-            photo=request.FILES.get('photo')
-            event_id=request.POST.get('event_name')
-            event_id=Event.objects.get(event_id=event_id)
-            if Event_Photos.objects.filter(event=event_id).count() >= 3:
+            form = EventPhotosForm(request.POST, request.FILES)
+            event_id = request.POST.get('event_name')
+            event = Event.objects.get(event_id=event_id)
+            
+            if Event_Photos.objects.filter(event=event).count() >= 3:
                 message = "Three images are already uploaded for this event."
                 return redirect(reverse('event_photos') + '?message1=' + message)
-            else:
-                ev=Event_Photos(photo=photo,event=event_id)
-                ev.save()
-                message = "Uploaded Sucessfully"
+            
+            if form.is_valid():
+                photo_instance = form.save(commit=False)
+                photo_instance.event = event
+                photo_instance.save()
+                message = "Uploaded Successfully"
                 return redirect(reverse('event_photos') + '?message2=' + message)
-        return render(request,'nss/add_photos.html',eve)
+                
+        return render(request, 'nss/add_photos.html', eve)
     except Exception:
-        return render(request,'nss/error.html')
+        return render(request, 'nss/error.html')
 @login_required()
 @group_required('po','vs')
 def event2(request):
@@ -378,10 +384,13 @@ def reject_attendance(request,pk):
 @group_required('po','vs')
 def add_attendance(request):
     try:
-        eve = {
-            'even': Event.objects.all().order_by('date').values()
-        }
-        return render(request, 'nss/add_attendance.html',eve)
+        form = AttendanceForm()
+        context = {'form': form}
+        
+        if request.GET.get('message'):
+            context['message'] = request.GET.get('message')
+            
+        return render(request, 'nss/add_attendance.html', context)
     except Exception:
         return render(request,'nss/error.html')
 
@@ -389,20 +398,28 @@ def add_attendance(request):
 @group_required('po','vs')
 def dep_wise(request):
     try:
-        if request.method=="POST":
-            unit=request.POST.get('unit')
-            event=request.POST.get('event')
-            event=Event.objects.get(event_id=event)
-            dept={
-                'pog':Programme.objects.all(),
-                'unit':unit,
-                'event':event,
-                'vol':volunteer.objects.filter(unit=unit,status='active'),
-                'list':[1,2,3]
+        if request.method == "POST":
+            form = DepartmentWiseForm(request.POST)
+            if form.is_valid():
+                unit = form.cleaned_data['unit']
+                event = form.cleaned_data['event']
+                
+                dept = {
+                    'pog': Programme.objects.all(),
+                    'unit': unit,
+                    'event': event,
+                    'vol': volunteer.objects.filter(unit=unit, status='active'),
+                    'list': [1, 2, 3],
+                    'form': form  # Add form back to context for redisplay
                 }
-            return render(request,'nss/unit_wise.html',dept)
-    except Exception:
-        return render(request,'nss/error.html')
+                return render(request, 'nss/unit_wise.html', dept)
+        else:
+            form = DepartmentWiseForm()
+            
+        return render(request, 'nss/dep_wise.html', {'form': form})
+    except Exception as e:
+        print(str(e))  # Add logging for debugging
+        return render(request, 'nss/error.html')
 
 @login_required()
 @group_required('po','vs')
@@ -489,27 +506,35 @@ def delete_images(request,pk,ev):
         return render(request,'nss/error.html')
 @login_required()
 @group_required('po','vs')
-def edit_event(request,pk):
+def edit_event(request, pk):
+    try:
+        event = get_object_or_404(Event, pk=pk)
+        event_details, created = Event_details.objects.get_or_create(event=event)
+        event_photos = Event_Photos.objects.filter(event=event)
 
-    eve={
-        'eve':Event.objects.filter(event_id=pk)
-    }
-    ev=Event.objects.get(event_id=pk)
-    event_Photos = Event_Photos.objects.filter(event=ev)
-    event_details, created = Event_details.objects.get_or_create(event=ev)
-    event1 = get_object_or_404(Event, pk=pk)
-    if request.method=='POST':
-        event_name=request.POST.get('event_name')
-        date=request.POST.get('date')
-        des=request.POST.get('des')
-        event_details.des=des
-        event1.event_name=event_name
-        event1.date=date
-        if event_details.des:
-            event_details.save()
-        event1.save()
-        return redirect('view_event')
-    return render(request,'nss/edit_event.html',eve)
+        if request.method == 'POST':
+            event_form = EditEventForm(request.POST, instance=event)
+            details_form = EditEventDetailsForm(request.POST, instance=event_details)
+            
+            if event_form.is_valid() and details_form.is_valid():
+                event_form.save()
+                details_form.save()
+                return redirect('view_event')
+        else:
+            event_form = EditEventForm(instance=event)
+            details_form = EditEventDetailsForm(instance=event_details)
+
+        context = {
+            'event_form': event_form,
+            'details_form': details_form,
+            'event_photos': event_photos,
+            'event': event
+        }
+
+        return render(request, 'nss/edit_event.html', context)
+    except Exception as e:
+        print(str(e))  # For debugging
+        return render(request, 'nss/error.html')
 
 @login_required()
 @group_required('po','vs')
@@ -521,48 +546,63 @@ def promote_check(request):
 
 @login_required()
 @group_required('po','vs')
-def monthly_report(request):
-    try:
-        if request.method=="POST":
-            year=request.POST.get('year')
-            print(year)
-            month=request.POST.get('month')
-            print(month)
-            events = Event.objects.filter(date__year=year, date__month=month)
-            details = Event_details.objects.filter(event__in=events)
-            pics = Event_Photos.objects.filter(event__in=events)
-            return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
-    except Exception:
-        return render(request,'nss/error.html')
-@login_required()
-@group_required('po','vs')
-def yearly_report(request):
-    try:
-        if request.method=='POST':
-            fromyear=request.POST.get('fromyear')
-            toyear=request.POST.get('toyear')
-            events = Event.objects.filter(date__gte=fromyear, date__lte=toyear)
-            print(events)  # Add a debug print statement
-            details = Event_details.objects.filter(event__in=events)
-            pics = Event_Photos.objects.filter(event__in=events)
-            return render(request, 'nss/report.html', {'event': events, 'details': details, 'pics': pics})
-    except Exception:
-        return render(request,'nss/error.html')
-@login_required()
-@group_required('po','vs')
 def select_month(request):
     try:
-        return render(request,'nss/select_month.html')
+        form = MonthlyReportForm()
+        return render(request, 'nss/select_month.html', {'form': form})
     except Exception:
         return render(request,'nss/error.html')
+
 @login_required()
 @group_required('po','vs')
 def select_year(request):
     try:
-        return render(request,'nss/select_year.html')
+        form = YearlyReportForm()
+        return render(request, 'nss/select_year.html', {'form': form})
     except Exception:
         return render(request,'nss/error.html')
 
+@login_required()
+@group_required('po','vs')
+def monthly_report(request):
+    try:
+        if request.method == "POST":
+            form = MonthlyReportForm(request.POST)
+            if form.is_valid():
+                year = form.cleaned_data['year']
+                month = form.cleaned_data['month']
+                events = Event.objects.filter(date__year=year, date__month=month)
+                details = Event_details.objects.filter(event__in=events)
+                pics = Event_Photos.objects.filter(event__in=events)
+                return render(request, 'nss/report.html', {
+                    'event': events,
+                    'details': details,
+                    'pics': pics
+                })
+        return redirect('select_month')
+    except Exception:
+        return render(request,'nss/error.html')
+
+@login_required()
+@group_required('po','vs')
+def yearly_report(request):
+    try:
+        if request.method == 'POST':
+            form = YearlyReportForm(request.POST)
+            if form.is_valid():
+                fromyear = form.cleaned_data['fromyear']
+                toyear = form.cleaned_data['toyear']
+                events = Event.objects.filter(date__gte=fromyear, date__lte=toyear)
+                details = Event_details.objects.filter(event__in=events)
+                pics = Event_Photos.objects.filter(event__in=events)
+                return render(request, 'nss/report.html', {
+                    'event': events,
+                    'details': details,
+                    'pics': pics
+                })
+        return redirect('select_year')
+    except Exception:
+        return render(request,'nss/error.html')
 
 @login_required()
 @group_required('po','vs')
@@ -692,15 +732,19 @@ def camp(request):
 @login_required()
 @group_required('po','vs')
 def addcamp(request):
-    if request.method=="POST":
-        camp_name=request.POST.get('camp_name')
-        fromdate=request.POST.get('fromdate')
-        todate=request.POST.get('todate')
-        ca=Camp(camp_name=camp_name,fromdate=fromdate,todate=todate)
-        ca.save()
-        message="Submitted Successfully"
-        return redirect(reverse('add_camp') + '?message=' + message)
-    return render(request,'camp/add_camp.html')
+    try:
+        if request.method == "POST":
+            form = CampForm(request.POST)
+            if form.is_valid():
+                form.save()
+                message = "Submitted Successfully"
+                return redirect(reverse('add_camp') + '?message=' + message)
+        else:
+            form = CampForm()
+        
+        return render(request, 'camp/add_camp.html', {'form': form})
+    except Exception:
+        return render(request, 'nss/error.html')
 
 @login_required()
 @group_required('po','vs')
@@ -746,21 +790,19 @@ def camp_event(request):
 @login_required()
 @group_required('po','vs')
 def add_camp_event(request):
-
-    camp={
-        'camp':Camp.objects.all()
-    }
-    if request.method == "POST":
-        event_name = request.POST.get('event_name')
-        date = request.POST.get('date')
-        description = request.POST.get('description')
-        camp=request.POST.get('camp')
-        camp=Camp.objects.get(camp_id=camp)
-        camp_event = Camp_event(camp=camp,event_name=event_name, des=description,date=date)
-        camp_event.save()
-        message = "Submitted Successfully"
-        return redirect(reverse('add_camp_event') + '?message=' + message)
-    return render(request, 'camp/add_camp_event.html',camp)
+    try:
+        if request.method == "POST":
+            form = CampEventForm(request.POST)
+            if form.is_valid():
+                form.save()
+                message = "Submitted Successfully"
+                return redirect(reverse('add_camp_event') + '?message=' + message)
+        else:
+            form = CampEventForm()
+        
+        return render(request, 'camp/add_camp_event.html', {'form': form})
+    except Exception:
+        return render(request, 'nss/error.html')
 
 
 @login_required()
@@ -773,22 +815,34 @@ def campevent(request):
 @login_required()
 @group_required('po','vs')
 def camp_photo(request):
-    eve = {
-        'even': Camp_event.objects.all().order_by('date').values()
-    }
-    if request.method == "POST" and request.FILES:
-        photo=request.FILES.get('photo')
-        event_id=request.POST.get('event_name')
-        event_id=Camp_event.objects.get(event_id=event_id)
-        if Camp_event_photos.objects.filter(event=event_id).count() >= 3:
-            message = "Three images are already uploaded for this event."
-            return redirect(reverse('camp_photo') + '?message1=' + message)
+    try:
+        if request.method == "POST":
+            form = CampPhotoForm(request.POST, request.FILES)
+            event_id = request.POST.get('event')
+            event = Camp_event.objects.get(event_id=event_id)
+            
+            if Camp_event_photos.objects.filter(event=event).count() >= 3:
+                message = "Three images are already uploaded for this event."
+                return redirect(reverse('camp_photo') + '?message1=' + message)
+            
+            if form.is_valid():
+                photo_instance = form.save(commit=False)
+                photo_instance.event = event
+                photo_instance.save()
+                message = "Uploaded Successfully"
+                return redirect(reverse('camp_photo') + '?message2=' + message)
+                
         else:
-            ev=Camp_event_photos(photo=photo,event=event_id)
-            ev.save()
-            message = "Uploaded Sucessfully"
-            return redirect(reverse('camp_photo') + '?message2=' + message)
-    return render(request,'camp/camp_photo.html',eve)
+            form = CampPhotoForm()
+            
+        context = {
+            'form': form,
+            'events': Camp_event.objects.all().order_by('-date')
+        }
+        return render(request, 'camp/camp_photo.html', context)
+    except Exception as e:
+        print(str(e))  # For debugging
+        return render(request, 'nss/error.html')
 
     
     
@@ -804,25 +858,29 @@ def view_camp_event(request):
     
 @login_required()
 @group_required('po','vs')
-def edit_camp_event(request,pk):
+def edit_camp_event(request, pk):
+    try:
+        event = get_object_or_404(Camp_event, pk=pk)
+        event_photos = Camp_event_photos.objects.filter(event=event)
 
-    eve={
-        'eve':Camp_event.objects.filter(event_id=pk)
-    }
-    ev=Camp_event.objects.get(event_id=pk)
-    event_Photos = Camp_event_photos.objects.filter(event=ev)
-    event1 = get_object_or_404(Camp_event, pk=pk)
-    if request.method=='POST':
-        event_name=request.POST.get('event_name')
-        date=request.POST.get('date')
-        des=request.POST.get('des')
-        event1.des=des
-        event1.event_name=event_name
-        event1.date=date
-        event1.save()
-        message = "Updated Successfully."
-        return redirect(reverse('edit_camp_event', args=[pk]) + '?message=' + message)
-    return render(request,'camp/edit_camp_event.html',eve)
+        if request.method == 'POST':
+            form = EditCampEventForm(request.POST, instance=event)
+            if form.is_valid():
+                form.save()
+                message = "Updated Successfully."
+                return redirect(reverse('edit_camp_event', args=[pk]) + '?message=' + message)
+        else:
+            form = EditCampEventForm(instance=event)
+
+        context = {
+            'form': form,
+            'event_photos': event_photos,
+            'event': event
+        }
+        return render(request, 'camp/edit_camp_event.html', context)
+    except Exception as e:
+        print(str(e))  # For debugging
+        return render(request, 'nss/error.html')
 
 @login_required()
 @group_required('po','vs')

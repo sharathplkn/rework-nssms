@@ -1,4 +1,4 @@
-{% extends 'nss/base.html'%}
+{% extends 'nss/base.html' %}
 {% load static %}
 {% block title %}
 attendance
@@ -7,47 +7,75 @@ attendance
 
 <head>
     <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
+    <style>
+        .photos-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .photo-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
-{% if request.GET.message %}
-<p align="center" style="color:green">{{ request.GET.message }}</p>
-{% endif %}
-{% for i in eve%}
-<form class="add-event-form" method="post" action="{% url 'edit_camp_event' i.event_id %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="event_name">Event Name:</label>
-    <input type="text" id="event_name" name="event_name" value="{{i.event_name}}">
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date" value="{{i.date|date:'Y-m-d'}}">
-    <!--Event-details-->
-    <label for="des">Description:</label><br>
-
-    {% if i.des %}
-    <textarea id="des" name="des">{{i.des}}</textarea>
-    {% else %}
-    No Description added yet.<a href="{% url 'event_details' %}">add Description</a>
-    {% endif%}
-    <br><br>
-
-    <label for="photo">Image:</label>
-    Current Images Uploaded are :<br>
-    {% if i.camp_eventphotos %}
-    {% for j in i.camp_eventphotos.all %}
-    {% if j.photo %}
-    <a href="{{j.photo.url}}" target="_blank">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_camp_images' j.id i.event_id %}"
-        onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
+<div class="add-event-form">
+    {% if request.GET.message %}
+    <p align="center" style="color:green">{{ request.GET.message }}</p>
     {% endif %}
-    {% endfor %}
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="id_camp">Camp:</label>
+        {{ form.camp }}
+        
+        <label for="id_event_name">Event Name:</label>
+        {{ form.event_name }}
+        
+        <label for="id_date">Date:</label>
+        {{ form.date }}
+        
+        <label for="id_des">Description:</label>
+        {{ form.des }}
+        
+        <div class="button-group">
+            <input type="submit" value="Update">
+            <input type="reset" value="Reset">
+        </div>
+    </form>
+
+    {% if event_photos %}
+    <div class="photos-section">
+        <h3>Event Photos</h3>
+        {% for photo in event_photos %}
+        <div class="photo-item">
+            <img src="{{ photo.photo.url }}" alt="Event photo" style="max-width: 200px;">
+            <a href="{% url 'delete_camp_images' photo.id event.event_id %}" 
+               onclick="return confirm('Are you sure you want to delete this image?')" 
+               class="delete-btn">Delete</a>
+        </div>
+        {% endfor %}
+    </div>
     {% endif %}
-    <br>
-    <br>
-    <a href="{% url 'camp_photo' %}">Upload Images</a>
-    <br><br>
-    
-
-    <input type="submit" value="Submit">
-    <input type="reset" value="Reset">
-
-</form>
-
-{% endfor %}
+</div>
 {% endblock %}

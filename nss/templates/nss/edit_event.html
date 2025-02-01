@@ -8,49 +8,40 @@ attendance
 <head>
     <link rel="stylesheet" href="{% static '/css/add_event.css'%}">
 </head>
-{% if request.GET.message %}
-<p align="center" style="color:green">{{ request.GET.message }}</p>
-{% endif %}
-{% for i in eve%}
-<form class="add-event-form" method="post" action="{% url 'edit_event' i.event_id %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="event_name">Event Name:</label>
-    <input type="text" id="event_name" name="event_name" value="{{i.event_name}}">
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date" value="{{i.date|date:'Y-m-d'}}">
-    <!--Event-details-->
-    <label for="des">Description:</label><br>
-    {% if i.eventdetails %}
-    {% for j in i.eventdetails.all%}
-    {% if j.des %}
-    <textarea id="des" name="des">{{j.des}}</textarea>
-    {% else %}
-    No Description added yet.<a href="{% url 'event_details' %}">add Description</a>
-    {% endif%}
-    {% endfor %}
+
+<div class="add-event-form">
+    {% if request.GET.message %}
+    <p align="center" style="color:green">{{ request.GET.message }}</p>
     {% endif %}
-    <br><br>
 
-    <label for="photo">Image:</label>
-    Current Images Uploaded are :<br>
-    {% if i.eventphotos %}
-    {% for j in i.eventphotos.all %}
-    {% if j.photo %}
-    <a href="{{j.photo.url}}" target="_blank">Image {{forloop.counter}} </a> -- <a href="{% url 'delete_images' j.id i.event_id %}"
-        onclick="return confirm('Are you sure you want to delete?')"> Delete</a><br>
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="id_event_name">Event Name:</label>
+        {{ event_form.event_name }}
+        
+        <label for="id_date">Date:</label>
+        {{ event_form.date }}
+        
+        <label for="id_des">Description:</label>
+        {{ details_form.des }}
+        
+        <input type="submit" value="Update">
+        <input type="reset" value="Reset">
+    </form>
+
+    {% if event_photos %}
+    <div class="photos-section">
+        <h3>Event Photos</h3>
+        {% for photo in event_photos %}
+        <div class="photo-item">
+            <img src="{{ photo.photo.url }}" alt="Event photo" style="max-width: 200px;">
+            <a href="{% url 'delete_images' photo.id event.event_id %}" 
+               onclick="return confirm('Are you sure you want to delete this image?')" 
+               class="delete-btn">Delete</a>
+        </div>
+        {% endfor %}
+    </div>
     {% endif %}
-    {% endfor %}
-    {% endif %}
-    <br>
-    <br>
-    <a href="{% url 'event_photos' %}">Upload Images</a>
-    <br><br>
-    
-
-    <input type="submit" value="Submit">
-    <input type="reset" value="Reset">
-
-</form>
-
-{% endfor %}
+</div>
 {% endblock %}
