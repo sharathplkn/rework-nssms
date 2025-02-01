@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from .decorators import group_required 
 from datetime import datetime
 from .filters import *
-from .forms import UserForm, GroupForm ,  UserForm2, UserForm3,UserForm4
+from .forms import *
 import os
 from django.template.loader import get_template
 from django.utils.timezone import now
@@ -19,6 +19,9 @@ from docx.shared import Inches, Cm
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+
+
+
 @login_required()
 def change_password(request):
     if request.method == 'POST':
@@ -52,43 +55,52 @@ def ns(request):
         return render(request, 'nss/home.html', context)
     except Exception:
         return render(request,'nss/error.html')
+    
+
+
 @login_required()
 @group_required('po','vs')
 def add_volunteer(request):
     try:
-        prog={
-            'dep':Programme.objects.all()
-        }
-        if request.method=="POST" and request.FILES:
-            name=request.POST.get('name')
-            guard_name=request.POST.get('guard_name')
-            guard_mob_no=request.POST.get('guard_mob_no')
-            sex=request.POST.get('sex')
-            dob=request.POST.get('dob')
-            programme_name=request.POST.get('programme')
-            year=request.POST.get('year')
-            community=request.POST.get('community')
-            address=request.POST.get('address')
-            blood_group=request.POST.get('blood_group')
-            height=request.POST.get('height')
-            weight=request.POST.get('weight')
-            mobile_no=request.POST.get('mobile_no')
-            Email_id=request.POST.get('email')
-            year_of_enrollment=request.POST.get('year_of_enrollment')
-            cultural_talents=request.POST.get('cultural_talents')
-            hobbies=request.POST.get('hobbies')
-            roll_no=request.POST.get('roll_no')
-            image=request.FILES.get ('image')  
-            unit=request.POST.get('unit') 
-            programme_id=Programme.objects.get(program_name=programme_name)
-            print(programme_id)
-            voluntee=volunteer(unit=unit,image=image,name=name,guard_name=guard_name,guard_mob_no=guard_mob_no,sex=sex,dob=dob,program=programme_id,year=year,community=community,address=address,blood_group=blood_group,height=height,weight=weight,mobile_no=mobile_no,Email_id=Email_id,year_of_enrollment=year_of_enrollment,cultural_talents=cultural_talents,hobbies=hobbies,roll_no=roll_no)
-            voluntee.save()
+        if request.method == "POST":
+            form = addVolunteerForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('view_volunteer')
+        else:
+            form = addVolunteerForm()
 
-            return redirect('view_volunteer')
-        return render(request,'nss/add_volunteer.html',prog)
-    except Exception:
-        return render(request,'nss/error.html')
+        return render(request, 'nss/add_volunteer.html', {'form': form})
+    except Exception as e:
+        print(str(e)) 
+        return render(request, 'nss/error.html')
+
+@login_required()
+@group_required('po','vs')
+def edit_volunteer(request, pk):
+    try:
+        volunteer_instance = get_object_or_404(volunteer, pk=pk)
+        
+        if request.method == "POST":
+            form = addVolunteerForm(request.POST, request.FILES, instance=volunteer_instance)
+            if form.is_valid():
+                form.save()  
+                return redirect('view_volunteer')  
+        else:
+            form = addVolunteerForm(instance=volunteer_instance)
+
+        context = {
+            'form': form,
+            'volunteer': volunteer_instance,
+        }
+        
+        return render(request, 'nss/edit_volunteer.html', context)
+    
+    except Exception as e:
+        print(str(e))
+        return render(request, 'nss/error.html')
+
+    
 @login_required()
 @group_required('po','vs')
 def view_volunteer(request):
@@ -173,6 +185,7 @@ def event(request):
     except Exception:
         return render(request,'nss/error.html')
 
+
 @login_required()
 @group_required('po','vs')
 def add_event(request):
@@ -187,6 +200,8 @@ def add_event(request):
         return render(request,'nss/add_event.html')
     except Exception:
         return render(request,'nss/error.html')
+
+
 @login_required()
 @group_required('po','vs')
 def event_details(request):
@@ -259,69 +274,6 @@ def event2(request):
         return render(request,'nss/event2.html')
     except Exception:
         return render(request,'nss/error.html')
-
-@login_required()
-@group_required('po','vs')
-def edit_volunteer(request, pk):
-    try:
-        Volunteer = get_object_or_404(volunteer, pk=pk)
-        if request.method == "POST":
-            name = request.POST.get('name')
-            guard_name = request.POST.get('guard_name')
-            guard_mob_no = request.POST.get('guard_mob_no')
-            sex = request.POST.get('sex')
-            dob = request.POST.get('dob')
-            programme_name = request.POST.get('programme')
-            year = request.POST.get('year')
-            community = request.POST.get('community')
-            address = request.POST.get('address')
-            blood_group = request.POST.get('blood_group')
-            height = request.POST.get('height')
-            weight = request.POST.get('weight')
-            unit = request.POST.get('unit')
-            mobile_no = request.POST.get('mobile_no')
-            Email_id = request.POST.get('email')
-            year_of_enrollment = request.POST.get('year_of_enrollment')
-            cultural_talents = request.POST.get('cultural_talents')
-            hobbies = request.POST.get('hobbies')
-            roll_no = request.POST.get('roll_no')
-            if 'image' in request.FILES:
-                image = request.FILES['image']
-                Volunteer.image = image
-            programme_id = Programme.objects.get(program_name=programme_name)
-
-            Volunteer.name = name
-            Volunteer.guard_name = guard_name
-            Volunteer.guard_mob_no = guard_mob_no
-            Volunteer.sex = sex
-            Volunteer.dob = dob
-            Volunteer.programme = programme_id
-            Volunteer.year = year
-            Volunteer.community = community
-            Volunteer.address = address
-            Volunteer.blood_group = blood_group
-            Volunteer.height = height
-            Volunteer.weight = weight
-            Volunteer.mobile_no = mobile_no
-            Volunteer.Email_id = Email_id
-            Volunteer.year_of_enrollment = year_of_enrollment
-            Volunteer.cultural_talents = cultural_talents
-            Volunteer.hobbies = hobbies
-            Volunteer.roll_no = roll_no
-            Volunteer.unit=unit
-
-
-            Volunteer.save()
-            return redirect('view_volunteer')
-
-        context = {
-            'dep': Programme.objects.all(),
-            'Volunteer': Volunteer
-        }
-        return render(request, 'nss/edit_volunteer.html', context)
-    except Exception:
-        return render(request,'nss/error.html')
-
 
 
 @login_required()

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User, Group, Permission
+from .models import *
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -63,3 +64,19 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ['name', 'permissions']
+
+
+
+class addVolunteerForm(forms.ModelForm):
+    class Meta:
+        model = volunteer
+        fields = [
+            'name', 'guard_name', 'guard_mob_no', 'sex', 'dob', 'program', 'year',
+            'community', 'address', 'blood_group', 'height', 'weight', 'mobile_no',
+            'Email_id', 'year_of_enrollment', 'cultural_talents', 'hobbies', 'roll_no',
+            'image', 'unit'
+        ]
+        widgets = {
+            'dob': forms.DateInput(attrs={'type': 'date'}),
+            'program': forms.Select(),
+        }

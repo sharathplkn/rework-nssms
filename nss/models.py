@@ -27,9 +27,7 @@ class volunteer(models.Model):
     ]
     sex=models.CharField(max_length=15,choices=sex_choices)
     dob=models.DateField()
-    year_choices=[
-        ('1','1'),('2','2'),('3','3')
-    ]
+    year_choices= [(1, '1'), (2, '2'), (3, '3')]
     year=models.IntegerField(choices=year_choices)
     community_choices=[
         ('ST','ST'),('SC','SC'),('General','General'),('OBC','OBC')
@@ -41,9 +39,7 @@ class volunteer(models.Model):
     ]
     blood_group=models.CharField(max_length=15,choices=blood_group_choices)
     height=models.IntegerField()
-    unit_choices=[
-        ('4','4'),('5','5'),('96','96')
-    ]
+    unit_choices=[(4, '4'), (5, '5'), (96, '96')]
     unit=models.IntegerField(choices=unit_choices)
     weight=models.IntegerField()
     mobile_no=models.IntegerField()
@@ -58,6 +54,7 @@ class volunteer(models.Model):
         return f"{self.name}"
     def total_hours(self):
         return self.attendances.aggregate(Sum('no_of_hours'))['no_of_hours__sum'] or 0
+    
 class Event(models.Model):
     event_id=models.AutoField(primary_key=True)
     event_name=models.CharField(max_length=60)

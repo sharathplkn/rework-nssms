@@ -1,116 +1,129 @@
 {% extends 'nss/base.html' %}
 {% load static %}
 {% block title %}
-    Edit Volunteer
+Edit Volunteer
 {% endblock %}
 {% block content %}
+
 <head>
-    <link rel="stylesheet" href="{% static '/css/edit_volunteer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/add_volunteer.css' %}">
 </head>
-<form class="volunteer-form" method="post" action="{% url 'edit_volunteer' pk=Volunteer.pk %}" enctype="multipart/form-data">
-    <fieldset>
-        <legend>Volunteer Details</legend>
-        {% csrf_token %}
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="{{ Volunteer.name }}" required>
 
-        <label for="guard_name">Fathers/Guardian Name:</label>
-        <input type="text" id="guard_name" name="guard_name" value="{{ Volunteer.guard_name }}" required>
+<div class="main">
+    <div class="main-body">
+        <div class="main-block">
+            <h5>Edit Volunteer</h5>
+            <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
 
-        <label for="guard_mob_no">Fathers/Guardian Mobile-No:</label>
-        <input type="tel" id="guard_mob_no" name="guard_mob_no" value="{{ Volunteer.guard_mob_no }}" required>
+                <div class="form-fields">
+                    <div class="form-field">
+                        <label for="{{ form.name.id_for_label }}">Name:</label>
+                        {{ form.name }}
+                    </div>
 
-        Gender:
-        <div class="radio-group">
-            <label for="male">Male</label>
-            <input type="radio" id="male" name="sex" value="male" {% if Volunteer.sex == 'male' %}checked{% endif %}>
-            <label for="female">Female</label>
-            <input type="radio" id="female" name="sex" value="female" {% if Volunteer.sex == 'female' %}checked{% endif %}>
+                    <div class="form-field">
+                        <label for="{{ form.guard_name.id_for_label }}">Guardian's Name:</label>
+                        {{ form.guard_name }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.guard_mob_no.id_for_label }}">Guardian's Mobile Number:</label>
+                        {{ form.guard_mob_no }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.sex.id_for_label }}">Sex:</label>
+                        {{ form.sex }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.dob.id_for_label }}">Date of Birth:</label>
+                        {{ form.dob }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.program.id_for_label }}">Programme:</label>
+                        {{ form.program }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.year.id_for_label }}">Year:</label>
+                        {{ form.year }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.community.id_for_label }}">Community:</label>
+                        {{ form.community }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.address.id_for_label }}">Address:</label>
+                        {{ form.address }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.blood_group.id_for_label }}">Blood Group:</label>
+                        {{ form.blood_group }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.height.id_for_label }}">Height (cm):</label>
+                        {{ form.height }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.weight.id_for_label }}">Weight (kg):</label>
+                        {{ form.weight }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.mobile_no.id_for_label }}">Mobile Number:</label>
+                        {{ form.mobile_no }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.Email_id.id_for_label }}">Email ID:</label>
+                        {{ form.Email_id }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.year_of_enrollment.id_for_label }}">Year of Enrollment:</label>
+                        {{ form.year_of_enrollment }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.cultural_talents.id_for_label }}">Cultural Talents:</label>
+                        {{ form.cultural_talents }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.hobbies.id_for_label }}">Hobbies:</label>
+                        {{ form.hobbies }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.roll_no.id_for_label }}">Roll Number:</label>
+                        {{ form.roll_no }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.unit.id_for_label }}">Unit:</label>
+                        {{ form.unit }}
+                    </div>
+
+                    <div class="form-field">
+                        <label for="{{ form.image.id_for_label }}">Upload Image:</label>
+                        {{ form.image }}
+                    </div>
+                </div>
+
+                <div class="submit-input">
+                    <input type="submit" value="Update Volunteer">
+                </div>
+            </form>
         </div>
-
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" value="{{ Volunteer.dob|date:'Y-m-d' }}" required>
-
-        <label for="image">Image:</label>
-        <input type="file" id="image" name="image">
-
-        <label for="programme">Programme:</label>
-        <select id="programme" name="programme" required>
-            <option value="" disabled>Select Programme</option>
-            {% for i in dep %}
-                <option value="{{ i.program_name }}" {% if Volunteer.programme.program_name == i.program_name %}selected{% endif %}>{{ i.program_name }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="year">Year:</label>
-        <select id="year" name="year" required>
-            <option value="" disabled>Select Year</option>
-            <option value="1" {% if Volunteer.year == 1 %}selected{% endif %}>1</option>
-            <option value="2" {% if Volunteer.year == 2 %}selected{% endif %}>2</option>
-            <option value="3" {% if Volunteer.year == 3 %}selected{% endif %}>3</option>
-        </select>
-        <label for="unit">Unit:</label>
-        <select id="unit" name="unit" required>
-            <option value="" disabled>Select Unit</option>
-            <option value="1" {% if Volunteer.unit == 1 %}selected{% endif %}>1</option>
-            <option value="2" {% if Volunteer.unit == 2 %}selected{% endif %}>2</option>
-            <option value="3" {% if Volunteer.unit == 3 %}selected{% endif %}>3</option>
-        </select>
-
-        <label>Community:</label>
-        <div class="radio-group">
-            <input type="radio" id="general" name="community" value="General" {% if Volunteer.community == 'General' %}checked{% endif %}>
-            <label for="general">General</label>
-            <input type="radio" id="sc" name="community" value="SC" {% if Volunteer.community == 'SC' %}checked{% endif %}>
-            <label for="sc">SC</label>
-            <input type="radio" id="st" name="community" value="ST" {% if Volunteer.community == 'ST' %}checked{% endif %}>
-            <label for="st">ST</label>
-            <input type="radio" id="obc" name="community" value="OBC" {% if Volunteer.community == 'OBC' %}checked{% endif %}>
-            <label for="obc">OBC</label>
-        </div>
-
-        <label for="address">Address:</label>
-        <textarea id="address" rows="5" name="address" required>{{ Volunteer.address }}</textarea>
-
-        <label for="blood_group">Blood Group:</label>
-        <select id="blood_group" name="blood_group">
-            <option value="A+" {% if Volunteer.blood_group == 'A+' %}selected{% endif %}>A+</option>
-            <option value="A-" {% if Volunteer.blood_group == 'A-' %}selected{% endif %}>A-</option>
-            <option value="B+" {% if Volunteer.blood_group == 'B+' %}selected{% endif %}>B+</option>
-            <option value="B-" {% if Volunteer.blood_group == 'B-' %}selected{% endif %}>B-</option>
-            <option value="O+" {% if Volunteer.blood_group == 'O+' %}selected{% endif %}>O+</option>
-            <option value="O-" {% if Volunteer.blood_group == 'O-' %}selected{% endif %}>O-</option>
-            <option value="AB+" {% if Volunteer.blood_group == 'AB+' %}selected{% endif %}>AB+</option>
-            <option value="AB-" {% if Volunteer.blood_group == 'AB-' %}selected{% endif %}>AB-</option>
-        </select>
-
-        <label for="height">Height (in cm):</label>
-        <input type="number" id="height" name="height" value="{{ Volunteer.height }}" required>
-
-        <label for="weight">Weight (in kg):</label>
-        <input type="number" id="weight" name="weight" value="{{ Volunteer.weight }}" required>
-
-        <label for="mobile_no">Mobile-No:</label>
-        <input type="tel" id="mobile_no" name="mobile_no" value="{{ Volunteer.mobile_no }}" pattern="\d{10}" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ Volunteer.Email_id }}" required>
-
-        <label for="year_of_enrollment">Year of Enrollment:</label>
-        <input type="number" id="year_of_enrollment" name="year_of_enrollment" value="{{ Volunteer.year_of_enrollment }}" required>
-
-        <label for="roll_no">Roll No:</label>
-        <input type="number" id="roll_no" name="roll_no" value="{{ Volunteer.roll_no }}" required>
-
-        <label for="cultural_talents">Cultural Talents:</label>
-        <textarea id="cultural_talents" rows="5" name="cultural_talents" required>{{ Volunteer.cultural_talents }}</textarea>
-
-        <label for="hobbies">Hobbies:</label>
-        <textarea id="hobbies" rows="5" name="hobbies" required>{{ Volunteer.hobbies }}</textarea>
-
-        <input type="submit" value="Submit">
-        <a href="javascript:history.back()" class="buttons" id="back" style="margin-left: 10px; text-decoration: none;">Cancel</a>
-    </fieldset>
-</form>
+    </div>
+</div>
 
 {% endblock %}
