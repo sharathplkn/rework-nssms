@@ -1,0 +1,59 @@
+{% extends 'nss/base.html' %}
+
+{% block content %}
+<style>
+    .add-event-form {
+        width: 90%; /* Adjusted for responsiveness */
+        max-width: 600px; /* Limit maximum width */
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .add-event-form input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px; /* Increased padding for better touch target */
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        width: 100%; /* Make the button full width */
+        margin-top: 20px; /* Added margin top for spacing */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .add-event-form {
+            width: 90%; /* Use 90% of the viewport width */
+            margin: 20px auto; /* Adjusted margin for smaller screens */
+            padding: 15px; /* Reduced padding for smaller screens */
+        }
+    }
+</style>
+
+{% if request.GET.message %}
+<p align="center" style="color:green">{{ request.GET.message }}</p>
+{% endif %}
+
+<div class="add-event-form">
+    <form method="post" action="{% url 'promote' %}">
+        {% csrf_token %}
+        <h4>Note</h4>
+        <p>
+            By clicking the button below, you will initiate a process to promote volunteers in our system. This action will update the volunteer records: increasing the service year for active volunteers and marking those who have completed three years as inactive. Please note that this operation cannot be undone. Ensure you have reviewed and confirmed your intent before proceeding.
+        </p>
+        <p>
+            <input type="checkbox" required>
+            I agree to the above terms and wish to proceed with promoting volunteers.
+        </p>
+        <input type="submit" value="Promote">
+    </form>
+</div>
+{% endblock %}

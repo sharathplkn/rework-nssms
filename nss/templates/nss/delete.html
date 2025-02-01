@@ -1,0 +1,4 @@
+<form action="{% url 'delete_volunteer' pk=Volunteer.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>

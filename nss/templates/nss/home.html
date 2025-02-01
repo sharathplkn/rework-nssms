@@ -1,0 +1,64 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Include CSS -->
+    <link rel="stylesheet" href="{% static '/css/home.css' %}">
+
+    <!-- NSS Dashboard Section -->
+    <section class="dashboard-section">
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Volunteers</h3>
+                <p>{{ volunteers.count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Recent Events</h3>
+                <p>{{ events.count }}</p>
+            </div>
+            {% if is_po_group %}
+            <div class="stat-card">
+                <h3>Pending Approvals</h3>
+                <p>{{ pending_approvals.count }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+
+
+    <!-- Pending Tasks Section (if user is a Program Officer) -->
+    {% if is_po_group %}
+    <section class="tasks-section">
+        <h2>Pending Tasks</h2>
+        <ul class="task-list">
+            {% for approval in pending_approvals %}
+            <li>Approval needed for Attendance {{ approval.event.event_name }} on {{ approval.date }} <a href="{% url 'view_attendance3' approval.status_id %}">View</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    {% if is_vs_group %}
+    <section class="tasks-section">
+        <h2>Attendance Waiting for Approval</h2>
+        <ul class="task-list">
+            {% for approval in pending_approvals %}
+            <li>Approval needed for Attendance {{ approval.event.event_name }} on {{ approval.date }} <a href="{% url 'view_attendance3' approval.status_id %}">View</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    <!-- Recent Events Section -->
+<section class="events-section">
+    <h2>Recent Events</h2>
+    <ul class="event-list">
+        {% for event in events %}
+        <li>
+            <div class="event-name">{{ event.event_name | title }}</div>
+            <div class="event-date">{{ event.date }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
+        </section>
+{% endblock %}

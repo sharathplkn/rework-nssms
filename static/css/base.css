@@ -1,0 +1,292 @@
+/* Reset and basic styles */
+body {
+  background-color: #f9f9f9;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the body takes up at least the full height of the viewport */
+}
+/* Hamburger Menu Styles */
+.hamburger-menu {
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  cursor: pointer;
+  position: absolute; /* Position it absolutely */
+  top: 20px; /* Adjust top position */
+  right: 20px; /* Adjust right position */
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.hamburger-menu .bar {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 4px 0;
+}
+
+/* Mobile Navigation Styles */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: linear-gradient(135deg, #04083f, #65718a);
+  padding: 10px;
+  position: absolute; /* Position it absolutely */
+  top: 60px; /* Adjust top position */
+  right: 20px; /* Adjust right position */
+  z-index: 1000; /* Ensure it's above other elements */
+  border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+.mobile-nav.active {
+  display: flex;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: flex; /* Show hamburger menu on mobile */
+  }
+
+  .mobile-header {
+    display: block; /* Show mobile header */
+  }
+
+  .logo-container {
+    display: none; /* Hide logos on mobile */
+  }
+
+  .desktop-nav {
+    display: none; /* Hide desktop navigation */
+  }
+}
+
+.wrapper {
+  flex: 1; /* Allow the wrapper to expand to fill the remaining vertical space */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styles */
+.header {
+  background: linear-gradient(135deg, #04083f, #65718a);
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left-logo, .right-logo {
+  height: 70px; 
+  width: auto; /* Adjust height as needed */
+}
+
+.header-content {
+  flex-grow: 1;
+  margin: 0 20px; /* Adjust margins as needed */
+}
+
+.header h3, .header h4 {
+  margin: 5px 0;
+  text-align: center;
+}
+
+.logout-form {
+  order: -1; /* Move the logout form above in the source order */
+  align-self: flex-end; /* Align to the end of the header */
+  margin-right: 20px; /* Adjust right margin as needed */
+}
+
+.logout-button {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  margin-bottom: 3px;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #1abc9c;
+}
+
+.logout {
+  padding: 5px 10px;
+  background-color: transparent; /* White background for a subtle difference */
+  color: white; /* Darker text color */
+  text-decoration: none;
+  border: 1px solid #ddd; /* Thin border for definition */
+  border-radius: 5px; /* Consistent rounded corners */
+  cursor: pointer;
+}
+
+.logout:hover {
+  border-color: #007bff; /* Same blue as other buttons, but only on hover */
+}
+
+/* Navigation styles */
+nav {
+  background: linear-gradient(135deg, #04083f, #65718a);
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline-block;
+  margin-right: 20px; /* Adjust spacing between items */
+}
+
+nav ul li a {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+  background-color: #1abc9c;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: linear-gradient(135deg, #141a6a, #65718a);
+  min-width: 160px;
+  z-index: 1;
+  top: 100%;
+  left: 0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  color: #fff;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: #1abc9c;
+}
+
+/* Content styles */
+.content {
+  flex: 1; /* Allow the content to expand to fill the remaining space */
+  padding: 20px;
+}
+
+/* Footer styles */
+.footer {
+  background: linear-gradient(135deg, #04083f, #65718a);
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.contact-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.contact-info p {
+  margin: 5px 20px; /* Adjust margins as needed */
+}
+
+.contact-info a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Styles for Mobile Screens */
+@media (max-width: 768px) {
+  .header {
+    min-height: 13vh;
+  }
+
+  .logo-heading {
+    display: none;
+  }
+
+  .institution-name h1 {
+    font-size: 18px; /* Adjust font size */
+    line-height: 24px; /* Adjust line height */
+  }
+
+  .logout-btn {
+    padding: 10px;
+    background: transparent;
+  }
+
+  #exit {
+    display: block;
+    width: 30px;
+  }
+
+  #log-text {
+    display: none;
+  }
+
+  nav {
+    width: 100%;
+    padding: 0;
+  }
+
+  nav ul {
+    display: flex;
+    flex-direction: column; /* Stack navigation items vertically */
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  nav ul li {
+    width: 100%; /* Full width for each navigation item */
+    text-align: center;
+    padding: 8px 10px;
+  }
+
+  nav ul li a {
+    font-size: 14px; /* Adjust font size for mobile */
+    padding: 10px; /* Adjust padding for mobile */
+    display: block; /* Ensure the link takes up the full height of the li */
+  }
+
+  .dropdown-content {
+    position: static; /* Stack dropdown items vertically */
+    display: none; /* Hide dropdown by default */
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block; /* Show dropdown on hover */
+  }
+}

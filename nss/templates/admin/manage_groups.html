@@ -1,0 +1,59 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/manage_groups.css' %}">
+</head>
+
+<div class="container">
+    <!-- Manage Groups Section -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Manage Groups</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <div style="color: black;font-weight: bold;">{{ form.name.label_tag }}</div>
+                    <div>{{ form.name }}</div>
+                </div>
+                <div style="color: black;font-weight: bold;">{{ form.permissions.label_tag }}</div>
+                <div class="permissions-container">
+                    
+                    <div>{{ form.permissions }}</div>
+                </div>
+                <button type="submit" class="btn-primary">Add Group</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Groups Section -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Existing Groups</h2>
+        </div>
+        <div class="card-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>
+                            <a href="{% url 'edit_group' group.pk %}" class="btn-warning">Edit</a>
+                            <a href="{% url 'delete_group' group.pk %}" class="btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

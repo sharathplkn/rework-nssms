@@ -1,0 +1,54 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block title %}
+    Attendance
+{% endblock %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/unit_wise.css' %}">
+</head>
+
+<div class="volunteer-form2">
+    <center>
+        <h1>{{ event.event_name | title }}</h1>
+        <h3>Unit-{{ unit }}</h3>
+    </center>
+    <form action="{% url 'attendance' event.event_id unit %}" method="post">
+        {% csrf_token %}
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" required>
+        
+        <label for="time">Number of hours</label>
+        <input type="number" name="time" id="time" required>
+</div>
+
+<div class="volunteer-form">
+    <div class="div1">
+        {% for i in pog %}
+            {% for k in list %}
+                {% volunteers_for_year_and_unit i.program_name k unit as volunteers %}
+                {% if volunteers %}
+                <div class="program-block">
+                    <div class="list-block">
+                        <center>
+                            <span class="year-text" style="background-color: rgb(7, 7, 44); color: white;">
+                                {{ i.program_name }} - Year {{ k }}
+                            </span>
+                        </center><br>
+                        {% for j in volunteers %}
+                        <div class="checkbox-label">
+                            <input type="checkbox" id="volunteer_{{ j.volunteer_id }}" name="volunteers" value="{{ j.volunteer_id }}">
+                            <label for="volunteer_{{ j.volunteer_id }}">{{ j.name }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <input type="submit" value="Submit" class="submit">
+    </form>
+</div>
+{% endblock %}

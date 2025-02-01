@@ -1,0 +1,156 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block title %}
+Add Volunteer
+{% endblock %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/add_volunteer.css' %}">
+</head>
+<form class="volunteer-form" method="post" action="{% url 'add_volunteer' %}" enctype="multipart/form-data">
+    <fieldset>
+        <legend align="center"><b>Volunteer Details</b></legend>
+        {% csrf_token %}
+        <div class="row">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="guard_name">Fathers/Guardian Name:</label>
+                <input type="text" id="guard_name" name="guard_name" required>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="guard_mob_no">Fathers/Guardian Mobile-No:</label>
+                <input type="tel" id="guard_mob_no" name="guard_mob_no" pattern="\d{10}" required>
+            </div>
+            <div>
+                <label for="sex">Gender:</label>
+                <div class="radio-group">
+                    <input type="radio" id="male" name="sex" value="male" required>
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="sex" value="female">
+                    <label for="female">Female</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div>
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image" required>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="programme">Programme:</label>
+                <select id="programme" name="programme" required>
+                    <option value="" disabled selected>Select Programme</option>
+                    {% for i in dep %}
+                    <option value="{{ i.program_name }}">{{ i.program_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="year">Year:</label>
+                <select id="year" name="year" required>
+                    <option value="" disabled selected>Select Year</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label>Community:</label>
+                <div class="radio-group">
+                    <input type="radio" id="general" name="community" value="General" required>
+                    <label for="general">General</label>
+                    <input type="radio" id="sc" name="community" value="SC">
+                    <label for="sc">SC</label>
+                    <input type="radio" id="st" name="community" value="ST">
+                    <label for="st">ST</label>
+                    <input type="radio" id="obc" name="community" value="OBC">
+                    <label for="obc">OBC</label>
+                </div>
+            </div>
+            <div>
+                <label for="address">Address:</label>
+                <textarea id="address" rows="5" name="address" required></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="blood_group">Blood Group:</label>
+                <select id="blood_group" name="blood_group">
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div>
+                <label for="unit">Unit:</label>
+                <select id="unit" name="unit" required>
+                    <option value="" disabled selected>Select Unit</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="96">96</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="height">Height (in cm):</label>
+                <input type="number" id="height" name="height" required min="20">
+            </div>
+            <div>
+                <label for="weight">Weight (in kg):</label>
+                <input type="number" id="weight" name="weight" required min="20">
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="mobile_no">Mobile-No:</label>
+                <input type="tel" id="mobile_no" name="mobile_no" pattern="\d{10}" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="year_of_enrollment">Year of Enrollment:</label>
+                <input type="number" id="year_of_enrollment" name="year_of_enrollment" required>
+            </div>
+            <div>
+                <label for="roll_no">Roll No:</label>
+                <input type="number" id="roll_no" name="roll_no">
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <label for="cultural_talents">Cultural Talents:</label>
+                <textarea id="cultural_talents" rows="5" name="cultural_talents" required></textarea>
+            </div>
+            <div>
+                <label for="hobbies">Hobbies:</label>
+                <textarea id="hobbies" rows="5" name="hobbies" required></textarea>
+            </div>
+        </div>
+        <input type="submit" value="Submit">
+    </fieldset>
+</form>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <style>
+    .colored-header {
+      font-size: 2em;
+      text-align: center;
+    }
+
+    .colored-header .n { color: orangered; }
+    .colored-header .o { color: green; }
+    .colored-header .d { color: orangered; }
+    .colored-header .e { color: green; }
+    .colored-header .s { color: orangered; }
+
+    /* Hamburger Menu Styles */
+    .hamburger-menu {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger-menu .bar {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 4px 0;
+    }
+
+    /* Mobile Navigation Styles */
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: linear-gradient(135deg, #04083f, #65718a);
+      padding: 10px;
+    }
+
+    .mobile-nav.active {
+      display: flex;
+    }
+
+    /* Scrollable Sections */
+    .scrollable-section {
+      max-height: 300px; /* Adjust height as needed */
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    /* Mobile Header Styles */
+    .mobile-header {
+      display: none;
+      text-align: center;
+      padding: 10px;
+      background: linear-gradient(135deg, #04083f, #65718a);
+      color: #fff;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .logo-container {
+        display: none; /* Hide logos on mobile */
+      }
+
+      .mobile-header {
+        display: block; /* Show mobile header */
+      }
+
+      .hamburger-menu {
+        display: flex; /* Show hamburger menu */
+      }
+
+      .desktop-nav {
+        display: none; /* Hide desktop navigation */
+      }
+
+      .header-content h3, .header-content h4 {
+        font-size: 16px; /* Adjust font size for mobile */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header Section for Large Screens -->
+    <header class="header">
+      <div class="logo-container">
+        <img src="{% static 'images/logo2.webp' %}" alt="College Logo" class="left-logo">
+        <div class="header-content">
+          <h3 class="colored-header">
+            <span class="n">N</span>SS</span> 
+            <span class="o">O</span>UTREACH 
+            <span class="d">D</span>EVELOPMENT 
+            <span class="e">E</span>NGAGEMENT 
+            <span class="s">S</span>YSTEM
+          </h3>
+          <h4>NEHRU ARTS AND SCIENCE COLLEGE KANHANGAD</h4>
+        </div>
+        <img src="{% static 'images/nss.png' %}" alt="NSS Logo" class="right-logo">
+      </div>
+    </header>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+      <h3 class="colored-header">
+        <span class="n">N</span>
+        <span class="o">O</span>
+        <span class="d">D</span>
+        <span class="e">E</span>
+        <span class="s">S</span>
+      </h3>
+    </div>
+
+    <!-- Hamburger Menu for Mobile -->
+    <div class="hamburger-menu" onclick="toggleNav()">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <!-- Navigation for Large Screens -->
+    <nav class="desktop-nav">
+      <ul>
+        <li><a href="{% url 'ns' %}">Home</a></li>
+        {% if is_po_group or is_vs_group %}
+        <li class="dropdown">
+          <a href="#">Volunteer</a>
+          <div class="dropdown-content">
+            <a href="{% url 'add_volunteer' %}">Add Volunteer</a>
+            <a href="{% url 'view_volunteer' %}">View Volunteer</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Event</a>
+          <div class="dropdown-content">
+            <a href="{% url 'add_event' %}">Add Event</a>
+            <a href="{% url 'event2' %}">Uploads</a>
+            <a href="{% url 'view_event' %}">View Events</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Attendance</a>
+          <div class="dropdown-content">
+            <a href="{% url 'att3' %}">Add Attendance</a>
+            <a href="{% url 'view_attendance' %}">View Attendance</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#">Report</a>
+          <div class="dropdown-content">          
+            <a href="{% url 'report_list' %}">Event-Wise</a>
+            <a href="{% url 'select_month' %}">Monthly Report</a>
+            <a href="{% url 'select_year' %}">Yearly Report</a>
+          </div>
+        </li>
+        {% endif %}
+        {% if is_admin_group or is_po_group %}
+        <li class="dropdown">
+          <a href="#">Users</a>
+          <div class="dropdown-content">
+            <a href="{% url 'manage_users' %}">Manage Users</a>
+            {% if is_admin_group %}
+            <a href="{% url 'manage_groups' %}">Manage Groups</a>
+            {% endif %}
+          </div>
+        </li>
+        {% endif %}
+        {% if is_po_group %}
+        <li><a href="{% url 'promote_check' %}">Promote</a></li>
+        <li class="dropdown">
+          <a href="{% url 'camp' %}">Camp</a>
+          <div class="dropdown-content"></div>
+        </li>
+        {% endif %}
+        <li>
+          <a href="{% url 'change_password' %}">Change Password</a>
+        </li>
+        <li>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout" type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="{% url 'ns' %}">Home</a></li>
+        {% if is_po_group or is_vs_group %}
+        <li><a href="{% url 'add_volunteer' %}">Add Volunteer</a></li>
+        <li><a href="{% url 'view_volunteer' %}">View Volunteer</a></li>
+        <li><a href="{% url 'add_event' %}">Add Event</a></li>
+        <li><a href="{% url 'view_event' %}">View Events</a></li>
+        <li><a href="{% url 'att3' %}">Add Attendance</a></li>
+        <li><a href="{% url 'view_attendance' %}">View Attendance</a></li>
+        <li><a href="{% url 'report_list' %}">Event-Wise Report</a></li>
+        <li><a href="{% url 'select_month' %}">Monthly Report</a></li>
+        <li><a href="{% url 'select_year' %}">Yearly Report</a></li>
+        {% endif %}
+        {% if is_admin_group or is_po_group %}
+        <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
+        {% if is_admin_group %}
+        <li><a href="{% url 'manage_groups' %}">Manage Groups</a></li>
+        {% endif %}
+        {% endif %}
+        {% if is_po_group %}
+        <li><a href="{% url 'promote_check' %}">Promote</a></li>
+        <li><a href="{% url 'camp' %}">Camp</a></li>
+        {% endif %}
+        <li><a href="{% url 'change_password' %}">Change Password</a></li>
+        <li>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout" type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Body Content -->
+    <div class="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="contact-info">
+      <p> &copy;NSSMS 2024 - Developed by the students of Int M.Sc. Computer Science, NASC </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for Hamburger Menu -->
+  <script>
+    function toggleNav() {
+      const mobileNav = document.getElementById('mobileNav');
+      mobileNav.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

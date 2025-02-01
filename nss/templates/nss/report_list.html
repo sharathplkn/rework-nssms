@@ -1,0 +1,25 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/report_list.css'%}">
+</head>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Event</th>
+        <th>actions</th>
+    </tr>
+{% for i in event %}
+<tr>
+    <td>{{i.date}}</td>
+    <td>{{i.event_name}}</td>
+    <td>                
+        <div class="button-container">
+        <a class="button" href="{% url 'report_list_more' i.event_id %}">Report</a>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

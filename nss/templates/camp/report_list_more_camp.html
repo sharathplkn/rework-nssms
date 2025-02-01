@@ -1,0 +1,43 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/report.css'%}">
+</head>
+
+<div class="print-content">
+    {% for i in eve%}
+    <div class="event-container">
+        <div class="header-content">
+            <img src="{% static '/images/banner2.png' %}" class="reportimg"> 
+        </div>
+        <h1 class="event-heading" align="center">{{i.event_name | upper }}</h1>
+        <div class="event-date">{{i.date}}</div>
+        <div class="event-description">
+
+            {{i.des}}
+    
+        </div>
+    {% endfor %}
+
+    <div class="image-gallery">
+        {% for k in pics%}
+        {% if k.photo %}
+        <div class="gallery-item">
+        <img src="{{k.photo.url}}">
+        </div>
+        {% endif %}
+        {%endfor%}
+    </div>
+</div>
+<div class="no-print">
+    <button class="print-button" onclick="printPdf()">Print as PDF</button>
+</div>
+
+
+<script>
+function printPdf() {
+    window.print();
+}
+</script>
+{% endblock %}

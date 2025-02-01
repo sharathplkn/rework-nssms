@@ -1,0 +1,33 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/add_event.css' %}">
+</head>
+{% if request.GET.message %}
+    <p align="center" style="color:green">{{ request.GET.message }}</p>
+{% endif %}
+<form class="add-event-form" method="post" action="{% url 'add_camp_event' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="camp">Camp</label>
+    <select id="camp" name="camp"> 
+        {% for i in camp %}
+        <option value="{{i.camp_id}}">{{i.camp_name}}</option>
+        {% endfor%}
+    </select>
+    <label for="event_name">Event Name:</label>
+    <input type="text" id="event_name" name="event_name" required>
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+</form>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,159 @@
+
+.volunteer-form2 {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+    .volunteer-form {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .volunteer-form legend ,.volunteer-form2{
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .volunteer-form label,.volunteer-form2 {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .volunteer-form,.volunteer-form2 input[type="text"],
+    .volunteer-form,.volunteer-form2 input[type="number"],
+    .volunteer-form input[type="tel"],
+    .volunteer-form,.volunteer-form2 input[type="date"],
+    .volunteer-form input[type="email"],
+    .volunteer-form select,
+    .volunteer-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    .volunteer-form input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    .volunteer-form textarea {
+        resize: vertical;
+    }
+
+    .volunteer-form input[type="submit"] {
+        background-color: rgb(7, 7, 44);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .volunteer-form input[type="submit"]:hover {
+        background-color: rgb(7, 7, 44);
+    }
+
+    .volunteer-form .radio-group label {
+        display: inline-block;
+        margin-right: 10px; /* Adjust spacing between radio buttons */
+    }
+/* General container styling */
+/* General container styling */
+.div1 {
+    padding: 10px;
+    margin-left: 5%; /* Adjusted margin to center within 90% of the browser width */
+    margin-right: 5%;
+    width: 90%; /* Use 90% of the browser window width */
+}
+
+/* Styling for each program block */
+.program-block {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Styling for each list block */
+.list-block {
+    margin-top: 10px; /* Adjusted margin */
+}
+
+/* Styling for year text */
+.year-text {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px; /* Reduced margin */
+    display: block;
+    padding: 8px;
+}
+
+/* Styling for checkboxes and labels */
+.checkbox-label {
+    display: inline-block; /* Ensure each checkbox-label pair is inline-block */
+    width: 20%; /* Large screens: 5 items per row */
+    margin-bottom: 8px;
+    padding: 0 10px; /* Adjust padding for spacing */
+}
+
+.checkbox-label input[type=checkbox] {
+    margin-right: 5px; /* Adjust spacing between checkbox and label */
+    /* Adjust size if needed */
+}
+
+.checkbox-label label {
+    font-size: 14px;
+    color: #555;
+}
+
+input[type="submit"] {
+    background-color: rgb(7, 7, 44);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 50%;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+input[type="submit"]:hover {
+    background-color: rgb(7, 7, 44);
+}
+
+@media (max-width: 992px) {
+    .div1 {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    
+    .checkbox-label {
+        width: 50%; /* Small screens: 2 items per row */
+    }
+}
+
+@media (max-width: 576px) {
+    .checkbox-label {
+        width: 100%; /* Extra small screens: 1 item per row */
+    }
+}

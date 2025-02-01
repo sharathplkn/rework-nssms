@@ -1,0 +1,52 @@
+{% extends 'nss/base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/manage_users.css' %}">
+</head>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Manage Users</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div>
+                    <div>{{ form.username.label_tag }}</div>
+                    <div>{{ form.username }}</div>
+                </div>
+
+                <div>
+                    <div>{{ form.email.label_tag }}</div>
+                    <div>{{ form.email }}</div>
+                </div>
+                <div class="form-check">
+                    <div> {{ form.is_active.label }}</div>
+                    <div> {{ form.is_active }}</div>
+                </div>
+                <div>
+                    <div>{{ form.groups.label_tag }}</div>
+                    <div>
+                        <select name="{{ form.groups.name }}" id="{{ form.groups.id }}" class="form-control">
+                            {% for group_id, group_name in form.groups.field.choices %}
+                            {% if group_name != 'admin' and is_po_group  %}
+                                <option value="{{ group_id }}" {% if group_id == form.instance.groups.first.id %} selected {% endif %}>{{ group_name }}</option>
+                            {% else %}
+                            <option value="{{ group_id }}" {% if group_id == form.instance.groups.first.id %} selected {% endif %}>{{ group_name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Optionally, include a link to reset password -->
+                <!-- <a href="{% url 'password_reset' %}?email={{ form.email.value }}" class="btn btn-info">Reset Password</a> -->
+
+                <button type="submit" class="btn-primary">Update User</button>
+                <a href="javascript:history.back()" class="buttons" style="margin-left: 10px;">Go back</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
